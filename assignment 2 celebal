@@ -1,0 +1,133 @@
+class Node:
+    """
+    Represents a node in a singly linked list.
+    """
+    def __init__(self, data):
+        """
+        Initializes a new Node object.
+
+        Args:
+            data: The data to be stored in the node.
+        """
+        self.data = data
+        self.next = None
+
+class LinkedList:
+    """
+    Represents a singly linked list.
+    """
+    def __init__(self):
+        """
+        Initializes an empty LinkedList object.
+        """
+        self.head = None
+
+    def add_end(self, data):
+        """
+        Adds a new node with the given data to the end of the list.
+
+        Args:
+            data: The data to be added to the list.
+        """
+        new_node = Node(data)
+        if not self.head:
+            self.head = new_node
+            return
+        current = self.head
+        while current.next:
+            current = current.next
+        current.next = new_node
+
+    def print_list(self):
+        """
+        Prints the elements of the linked list.
+        """
+        if not self.head:
+            print("List is empty.")
+            return
+        current = self.head
+        while current:
+            print(current.data, end=" -> ")
+            current = current.next
+        print("None")
+
+    def delete_nth_node(self, n):
+        """
+        Deletes the nth node (1-based index) from the linked list.
+
+        Args:
+            n: The index of the node to be deleted (1-based).
+
+        Raises:
+            IndexError: If the list is empty or the index is out of range.
+        """
+        if not self.head:
+            raise IndexError("Cannot delete from an empty list.")
+
+        if n == 1:
+            self.head = self.head.next
+            return
+
+        current = self.head
+        previous = None
+        count = 1
+
+        while current and count < n:
+            previous = current
+            current = current.next
+            count += 1
+
+        if not current:
+            raise IndexError(f"Index {n} out of range for a list of length {count - 1}.")
+
+        previous.next = current.next
+
+# Test the implementation
+if __name__ == "__main__":
+    my_list = LinkedList()
+
+    # Add elements to the list
+    my_list.add_end(10)
+    my_list.add_end(20)
+    my_list.add_end(30)
+    my_list.add_end(40)
+
+    print("Original list:")
+    my_list.print_list()  # Output: 10 -> 20 -> 30 -> 40 -> None
+
+    # Delete the 2nd node
+    try:
+        my_list.delete_nth_node(2)
+        print("\nList after deleting the 2nd node:")
+        my_list.print_list()  # Output: 10 -> 30 -> 40 -> None
+    except IndexError as e:
+        print(f"\nError: {e}")
+
+    # Delete the first node
+    try:
+        my_list.delete_nth_node(1)
+        print("\nList after deleting the 1st node:")
+        my_list.print_list()  # Output: 30 -> 40 -> None
+    except IndexError as e:
+        print(f"\nError: {e}")
+
+    # Delete the last node
+    try:
+        my_list.delete_nth_node(2)
+        print("\nList after deleting the 2nd node:")
+        my_list.print_list()  # Output: 30 -> None
+    except IndexError as e:
+        print(f"\nError: {e}")
+
+    # Try to delete from an empty list
+    empty_list = LinkedList()
+    try:
+        empty_list.delete_nth_node(1)
+    except IndexError as e:
+        print(f"\nError when deleting from an empty list: {e}")
+
+    # Try to delete with an out-of-range index
+    try:
+        my_list.delete_nth_node(3)
+    except IndexError as e:
+        print(f"\nError when deleting with an out-of-range index: {e}")
